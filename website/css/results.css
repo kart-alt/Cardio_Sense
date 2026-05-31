@@ -1,0 +1,406 @@
+/* css/results.css — Risk Results Evaluation Page Styles */
+
+.results-layout {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 12px 0;
+}
+
+/* Actions Header */
+.results-action-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 16px;
+}
+
+.action-buttons-group {
+  display: flex;
+  gap: 12px;
+}
+
+/* Results Grid Layout */
+.results-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 1.9fr;
+  gap: 24px;
+}
+
+.results-left-col {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.results-right-col {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* General Results Card */
+.results-card {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 24px;
+  box-shadow: var(--shadow-sm);
+}
+
+.results-card h3 {
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 12px;
+  margin-bottom: 16px;
+}
+
+.center-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* SVG Semicircle Risk Gauge */
+.gauge-container {
+  position: relative;
+  width: 300px;
+  height: 180px;
+  margin-top: 10px;
+}
+
+.semicircle-gauge {
+  display: block;
+}
+
+#gauge-needle {
+  transform-origin: 150px 160px;
+  transition: transform 1.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.gauge-center-labels {
+  position: absolute;
+  bottom: 2px;
+  left: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.gauge-score-value {
+  font-size: 3.4rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.gauge-score-level {
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  margin-top: 4px;
+  letter-spacing: 0.5px;
+}
+
+.confidence-container {
+  margin-top: 16px;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  background-color: var(--bg-tertiary);
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+}
+
+/* Rhythm Warning Banner */
+.banner-card {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  border-left: 5px solid var(--text-muted);
+  transition: all 0.3s ease;
+}
+
+.banner-card.banner-normal {
+  border-left-color: var(--accent-green);
+  background: linear-gradient(90deg, rgba(16, 185, 129, 0.05) 0%, rgba(17, 24, 39, 0.2) 100%);
+}
+
+.banner-card.banner-warning {
+  border-left-color: var(--accent-yellow);
+  background: linear-gradient(90deg, rgba(245, 158, 11, 0.05) 0%, rgba(17, 24, 39, 0.2) 100%);
+}
+
+.banner-card.banner-critical {
+  border-left-color: var(--accent-red);
+  background: linear-gradient(90deg, rgba(239, 68, 68, 0.05) 0%, rgba(17, 24, 39, 0.2) 100%);
+}
+
+.banner-icon-container {
+  font-size: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.banner-card.banner-normal .banner-icon-container {
+  background-color: rgba(16, 185, 129, 0.1);
+  color: var(--accent-green);
+}
+.banner-card.banner-warning .banner-icon-container {
+  background-color: rgba(245, 158, 11, 0.1);
+  color: var(--accent-yellow);
+}
+.banner-card.banner-critical .banner-icon-container {
+  background-color: rgba(239, 68, 68, 0.1);
+  color: var(--accent-red);
+  animation: pulse-border 1.5s infinite;
+}
+
+@keyframes pulse-border {
+  0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+  70% { box-shadow: 0 0 0 8px rgba(239, 68, 68, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+}
+
+.banner-body-text h3 {
+  border-bottom: none !important;
+  margin-bottom: 2px !important;
+  padding-bottom: 0 !important;
+  font-size: 1.1rem;
+}
+
+.banner-body-text p {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+}
+
+/* SHAP Horizontal Bars */
+.shap-bars-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 12px;
+}
+
+.shap-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.shap-row-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.shap-feature-name {
+  color: var(--text-primary);
+}
+
+.shap-contrib-val {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 600;
+}
+
+.shap-contrib-val.increases {
+  color: var(--accent-red);
+}
+
+.shap-contrib-val.decreases {
+  color: var(--accent-green);
+}
+
+.shap-bar-track {
+  height: 10px;
+  background-color: var(--bg-tertiary);
+  border-radius: 5px;
+  overflow: hidden;
+  position: relative;
+}
+
+.shap-bar-fill {
+  height: 100%;
+  border-radius: 5px;
+  width: 0%;
+  transition: width 1.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.shap-bar-fill.increases-risk {
+  background-color: var(--accent-red);
+  box-shadow: 0 0 6px rgba(239, 68, 68, 0.4);
+}
+
+.shap-bar-fill.decreases-risk {
+  background-color: var(--accent-green);
+  box-shadow: 0 0 6px rgba(16, 185, 129, 0.4);
+}
+
+.shap-loading-placeholder {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  padding: 16px 0;
+}
+
+/* Clinical Table styling */
+.clinical-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.88rem;
+}
+
+.clinical-table th {
+  color: var(--text-secondary);
+  font-weight: 600;
+  border-bottom: 2px solid var(--border);
+  padding: 10px 12px;
+}
+
+.clinical-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+
+.clinical-table tr:last-child td {
+  border-bottom: none;
+}
+
+.table-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 12px;
+  display: inline-block;
+  text-transform: uppercase;
+}
+
+.table-badge.normal {
+  background-color: rgba(16, 185, 129, 0.1);
+  color: var(--accent-green);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.table-badge.warning {
+  background-color: rgba(245, 158, 11, 0.1);
+  color: var(--accent-yellow);
+  border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+.table-badge.critical {
+  background-color: rgba(239, 68, 68, 0.1);
+  color: var(--accent-red);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+/* Clinical Recommendations Full-Width Card */
+.recommendation-content-box {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.recommendation-content-box h4 {
+  font-size: 1.05rem;
+  color: var(--accent-cyan);
+  font-weight: 600;
+}
+
+.rec-paragraph {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.clinical-warning-box {
+  background-color: rgba(245, 158, 11, 0.04);
+  border: 1px solid rgba(245, 158, 11, 0.15);
+  border-radius: var(--radius-sm);
+  padding: 14px 18px;
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+
+.clinical-warning-box i {
+  font-size: 1.2rem;
+  margin-top: 2px;
+}
+
+.warning-text-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 0.85rem;
+}
+
+.warning-text-container strong {
+  color: var(--text-primary);
+}
+
+.warning-text-container span {
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+/* Responsiveness overrides */
+@media (max-width: 900px) {
+  .results-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Printing Report CSS rules */
+@media print {
+  .results-layout {
+    max-width: 100% !important;
+    padding: 0 !important;
+  }
+  .results-grid {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 16px !important;
+  }
+  .gauge-container {
+    width: 250px !important;
+    height: 150px !important;
+  }
+  .gauge-score-value {
+    font-size: 2.8rem !important;
+  }
+  .clinical-print-header {
+    display: flex !important;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #000;
+    padding-bottom: 12px;
+    margin-bottom: 20px;
+  }
+  .print-meta-left h1 {
+    font-size: 1.6rem;
+    color: #000 !important;
+  }
+  .print-meta-left p {
+    font-size: 0.85rem;
+    color: #444;
+  }
+  .print-meta-right {
+    text-align: right;
+    font-size: 0.8rem;
+  }
+  .table-badge {
+    border: 1px solid #777 !important;
+    background: none !important;
+    color: #000 !important;
+  }
+}

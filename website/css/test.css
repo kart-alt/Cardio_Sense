@@ -1,0 +1,322 @@
+/* css/test.css — Test Assessment Page Layout */
+
+.test-layout {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 12px 0;
+}
+
+.test-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Pre-check & Instructions View */
+.test-instructions-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.instruction-card {
+  border-radius: var(--radius-lg);
+  padding: 30px;
+}
+
+.instruction-card h2 {
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 15px;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.instruction-lead {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  margin-bottom: 24px;
+  max-width: 800px;
+}
+
+.instructions-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin-bottom: 30px;
+}
+
+.step-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.step-number {
+  background-color: rgba(0, 229, 255, 0.1);
+  border: 1px solid rgba(0, 229, 255, 0.3);
+  color: var(--accent-cyan);
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+.step-desc {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+}
+
+.step-desc strong {
+  color: var(--text-primary);
+  display: block;
+  margin-bottom: 2px;
+}
+
+.start-btn-container {
+  display: flex;
+  justify-content: center;
+  padding-top: 10px;
+}
+
+.btn-start-test {
+  min-width: 280px;
+  padding: 16px 36px;
+  border-radius: 30px;
+  font-size: 1.1rem;
+  letter-spacing: 0.5px;
+}
+
+/* Pre-check Grid */
+.precheck-card {
+  padding: 24px;
+}
+
+.precheck-card h3 {
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 12px;
+  margin-bottom: 20px;
+}
+
+.precheck-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.precheck-item {
+  background-color: var(--bg-tertiary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.25s ease;
+}
+
+.precheck-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background-color: var(--text-muted);
+}
+
+.precheck-label {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.precheck-value {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.status-icon {
+  font-size: 1.1rem;
+  margin-bottom: 4px;
+}
+
+/* Pre-check Item State Styling */
+.precheck-item.status-checking::before {
+  background-color: var(--accent-yellow);
+}
+.precheck-item.status-checking .status-icon {
+  color: var(--accent-yellow);
+}
+
+.precheck-item.status-success::before {
+  background-color: var(--accent-green);
+}
+.precheck-item.status-success .status-icon {
+  color: var(--accent-green);
+}
+
+.precheck-item.status-error::before {
+  background-color: var(--accent-red);
+}
+.precheck-item.status-error .status-icon {
+  color: var(--accent-red);
+}
+
+/* Active Test execution view */
+.active-test-container {
+  max-width: 600px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.active-test-card {
+  padding: 30px;
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.active-test-card h2 {
+  margin-bottom: 6px;
+}
+
+.test-lead {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  margin-bottom: 30px;
+}
+
+/* Circular Countdown ring */
+.circular-progress-wrapper {
+  position: relative;
+  width: 220px;
+  height: 220px;
+  margin-bottom: 24px;
+}
+
+.progress-ring {
+  transform: rotate(-90deg);
+  transform-origin: 50% 50%;
+}
+
+.progress-ring-circle {
+  transition: stroke-dashoffset 1s linear;
+}
+
+.countdown-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.countdown-number {
+  font-size: 3.8rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1;
+}
+
+.countdown-label {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  letter-spacing: 1px;
+  margin-top: 4px;
+}
+
+/* Active Progress Status Block */
+.test-status-subcard {
+  background-color: var(--bg-tertiary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  width: 100%;
+  max-width: 440px;
+  margin-bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.status-spinner-text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.progress-bar-flat-wrapper {
+  height: 6px;
+  background-color: var(--bg-primary);
+  border-radius: 3px;
+  overflow: hidden;
+  width: 100%;
+}
+
+.progress-bar-flat-fill {
+  height: 100%;
+  background-color: var(--accent-cyan);
+  width: 0%;
+  transition: width 1s linear;
+}
+
+/* Waveform preview below the timer */
+.test-waveform-preview {
+  width: 100%;
+  border-top: 1px solid var(--border);
+  padding-top: 18px;
+  text-align: left;
+}
+
+.test-waveform-preview h4 {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+.test-mini-chart-wrapper {
+  height: 100px;
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* Responsiveness overrides */
+@media (max-width: 900px) {
+  .precheck-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .precheck-grid {
+    grid-template-columns: 1fr;
+  }
+}

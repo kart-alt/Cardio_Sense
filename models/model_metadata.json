@@ -1,0 +1,30 @@
+{
+  "model_version": "1.0.0",
+  "training_timestamp": "2026-05-31T17:54:23Z",
+  "performance_metrics": {
+    "r2_score": 0.9971,
+    "mean_absolute_error": 1.5861,
+    "root_mean_squared_error": 2.293
+  },
+  "xgb_available": true,
+  "lgbm_available": false,
+  "feature_names": [
+    "heart_rate_bpm",
+    "rr_interval_mean_ms",
+    "rr_std_ms",
+    "sdnn_ms",
+    "rmssd_ms",
+    "pnn50",
+    "lf_hf_ratio",
+    "spo2_percent",
+    "spo2_min",
+    "pulse_rate_bpm",
+    "pulse_variability",
+    "body_temp_celsius",
+    "motion_magnitude",
+    "stability_score",
+    "contact_quality",
+    "age",
+    "gender_encoded"
+  ]
+}

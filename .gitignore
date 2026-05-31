@@ -1,0 +1,14 @@
+# Dependencies
+node_modules/
+__pycache__/
+*.pyc
+
+# Local Databases
+*.sqlite
+database.json
+
+# Local Environment & Logs
+.system_generated/
+.idea/
+.vscode/
+*.log

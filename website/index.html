@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CardioAI Monitor | Advanced Cardiovascular Risk Assessment</title>
+  <!-- SEO Tags -->
+  <meta name="description" content="State-of-the-art real-time cardiovascular risk monitoring dashboard and AI-powered early warning system.">
+  
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- CSS Stylesheets -->
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/test.css">
+  <link rel="stylesheet" href="css/results.css">
+  <link rel="stylesheet" href="css/history.css">
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+  <nav class="navbar" id="main-nav">
+    <div class="nav-container">
+      <div class="nav-logo" id="logo-section">
+        <div class="logo-wrapper">
+          <i class="fa-solid fa-heart-pulse logo-icon"></i>
+          <div class="pulsing-glow"></div>
+        </div>
+        <span class="logo-text">Cardio<span class="highlight-cyan">AI</span></span>
+        <span class="status-dot-pulse" id="device-pulse-dot" title="Device Connected"></span>
+      </div>
+
+      <!-- Main Navigation Links (Hidden when logged out) -->
+      <ul class="nav-links hidden" role="navigation" id="navigation-list">
+        <li class="nav-item active" data-page="dashboard" id="nav-dashboard">
+          <a href="#dashboard"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
+        </li>
+        <li class="nav-item" data-page="test" id="nav-test">
+          <a href="#test"><i class="fa-solid fa-gauge-high"></i> Assessment Test</a>
+        </li>
+        <li class="nav-item" data-page="results" id="nav-results">
+          <a href="#results"><i class="fa-solid fa-file-medical"></i> Risk Results</a>
+        </li>
+        <li class="nav-item" data-page="history" id="nav-history">
+          <a href="#history"><i class="fa-solid fa-clock-rotate-left"></i> History Log</a>
+        </li>
+      </ul>
+
+      <!-- Right Device Status controls -->
+      <div class="nav-controls" id="system-controls">
+        <!-- Interactive Demo mode indicator toggle -->
+        <button class="btn-demo-mode hide-on-print" id="demo-mode-toggle" title="Toggle Demo Mode for Offline Presentation">
+          <i class="fa-solid fa-masks-theater"></i> Demo Mode: <span id="demo-status-text">OFF</span>
+        </button>
+
+        <div class="status-badge" id="device-status-badge">
+          <span class="badge-text" id="connection-status-text">DISCONNECTED</span>
+        </div>
+
+        <div class="device-icon" id="battery-status" title="Battery Percentage">
+          <i class="fa-solid fa-battery-empty" id="battery-icon"></i>
+          <span class="icon-value" id="battery-text">--%</span>
+        </div>
+
+        <div class="device-icon" id="wifi-status" title="Signal Strength">
+          <i class="fa-solid fa-wifi" id="wifi-icon"></i>
+          <span class="icon-value" id="wifi-text">-- dBm</span>
+        </div>
+
+        <div class="clock-display" id="time-display">--:--:--</div>
+
+        <!-- Logged-in Patient profile pill (Hidden by default) -->
+        <div class="nav-profile-widget hidden" id="nav-profile-widget">
+          <div class="profile-info" title="Patient Account ID">
+            <i class="fa-solid fa-circle-user profile-avatar"></i>
+            <span class="profile-name" id="user-display-name">Guest Patient</span>
+          </div>
+          <button class="btn-logout" id="btn-logout" title="Sign Out of Portal">
+            <i class="fa-solid fa-right-from-bracket"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Network Interruption / Offline Banner -->
+  <div class="alert-banner hidden" id="network-alert-banner">
+    <div class="banner-content">
+      <i class="fa-solid fa-triangle-exclamation animate-bounce"></i>
+      <span>Hardware Connection Offline. Please start Node.js backend server or click <strong>Demo Mode</strong> to simulate live biometrics.</span>
+    </div>
+  </div>
+
+  <!-- SPA Views Container -->
+  <main class="page-container" id="main-content">
+
+    <!-- PAGE 0: LOGIN & PATIENT REGISTRATION SCREEN (Default starting view when unauthenticated) -->
+    <section class="page-view active" id="login-page">
+      <div class="auth-layout">
+        
+        <!-- Welcome Card -->
+        <div class="auth-intro-card">
+          <div class="intro-header">
+            <i class="fa-solid fa-heart-pulse diagnostic-hero-icon heartbeat-anim"></i>
+            <h2>CardioAI Portal</h2>
+            <p>Artificial Intelligence & Edge IoT Cardiovascular Risk Analytics</p>
+          </div>
+          
+          <div class="intro-bullets">
+            <div class="bullet-item">
+              <i class="fa-solid fa-circle-nodes text-cyan"></i>
+              <span>Real-time continuous 12-bit raw ECG stream visualization.</span>
+            </div>
+            <div class="bullet-item">
+              <i class="fa-solid fa-brain text-green"></i>
+              <span>Multi-vitals feature aggregation & predictive neural networks.</span>
+            </div>
+            <div class="bullet-item">
+              <i class="fa-solid fa-sliders text-orange"></i>
+              <span>SHAP (Shapley Additive exPlanations) risk contribution plotting.</span>
+            </div>
+          </div>
+
+          <div class="auth-quick-info">
+            <p><i class="fa-solid fa-info-circle text-cyan"></i> <strong>Evaluation Mode Check:</strong> Quick demo credentials are pre-registered on the backend server for testing:</p>
+            <div class="demo-credential-pill">
+              <span>Email: <strong>patient@cardio.ai</strong></span>
+              <span>Password: <strong>password</strong></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Glassmorphism Form Card -->
+        <div class="auth-form-card">
+          <!-- Sign In Form -->
+          <form class="auth-form" id="login-form">
+            <h3><i class="fa-solid fa-shield-halved text-cyan"></i> Sign In to Patient Portal</h3>
+            <p class="form-desc">Provide your clinical registered credentials to access biometrics dashboards.</p>
+            
+            <div class="auth-alert hidden" id="login-error-alert">Invalid email or password.</div>
+
+            <div class="form-group">
+              <label for="login-email">Patient Registered Email</label>
+              <div class="input-wrapper">
+                <i class="fa-regular fa-envelope input-icon"></i>
+                <input type="email" id="login-email" required placeholder="patient@cardio.ai" autocomplete="username">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="login-password">Access Password</label>
+              <div class="input-wrapper">
+                <i class="fa-solid fa-lock input-icon"></i>
+                <input type="password" id="login-password" required placeholder="••••••••" autocomplete="current-password">
+              </div>
+            </div>
+
+            <button class="btn btn-primary btn-large btn-auth" type="submit" id="btn-login-submit">
+              <i class="fa-solid fa-right-to-bracket"></i> AUTHORIZE & ACCESS PORTAL
+            </button>
+
+            <p class="form-footer-link">
+              New patient? <a href="#" id="link-show-register">Create registered account</a>
+            </p>
+          </form>
+
+          <!-- Register Form (Hidden by default) -->
+          <form class="auth-form hidden" id="register-form">
+            <h3><i class="fa-solid fa-user-plus text-green"></i> Patient Portal Registration</h3>
+            <p class="form-desc">Register your biometrics profile to allocate isolated diagnostic records.</p>
+            
+            <div class="auth-alert hidden" id="register-error-alert">Registration failed. Email already exists.</div>
+            <div class="auth-alert-success hidden" id="register-success-alert">Account successfully registered! Redirecting...</div>
+
+            <div class="form-group">
+              <label for="reg-name">Full Patient Name</label>
+              <div class="input-wrapper">
+                <i class="fa-regular fa-user input-icon"></i>
+                <input type="text" id="reg-name" required placeholder="John Doe">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="reg-email">Clinical Contact Email</label>
+              <div class="input-wrapper">
+                <i class="fa-regular fa-envelope input-icon"></i>
+                <input type="email" id="reg-email" required placeholder="john.doe@example.com" autocomplete="username">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="reg-password">Create Access Password</label>
+              <div class="input-wrapper">
+                <i class="fa-solid fa-lock input-icon"></i>
+                <input type="password" id="reg-password" required placeholder="••••••••" autocomplete="new-password">
+              </div>
+            </div>
+
+            <button class="btn btn-primary btn-large btn-auth btn-success" type="submit" id="btn-register-submit">
+              <i class="fa-solid fa-user-check"></i> REGISTER & INITIALIZE PROFILE
+            </button>
+
+            <p class="form-footer-link">
+              Already registered? <a href="#" id="link-show-login">Sign In here</a>
+            </p>
+          </form>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- PAGE 1: DASHBOARD VIEW -->
+    <section class="page-view" id="dashboard-page">
+      <div class="dashboard-layout">
+        <!-- Sidebar / Top KPI Row -->
+        <div class="kpi-row" id="kpi-grid">
+          <!-- Heart Rate Card -->
+          <div class="kpi-card" id="kpi-card-hr">
+            <div class="kpi-header">
+              <span class="kpi-title"><i class="fa-solid fa-heartbeat text-red heartbeat-anim"></i> Heart Rate</span>
+              <span class="kpi-badge badge-normal" id="kpi-badge-hr">Normal</span>
+            </div>
+            <div class="kpi-body">
+              <span class="kpi-value metric-value" id="kpi-val-hr">--</span>
+              <span class="kpi-unit">BPM</span>
+            </div>
+            <div class="kpi-footer">
+              <span class="kpi-subtext" id="kpi-sub-hr">Lead: Stable Rhythm</span>
+            </div>
+          </div>
+
+          <!-- SpO2 Card -->
+          <div class="kpi-card" id="kpi-card-spo2">
+            <div class="kpi-header">
+              <span class="kpi-title"><i class="fa-solid fa-lungs text-cyan"></i> Blood Oxygen</span>
+              <span class="kpi-badge badge-normal" id="kpi-badge-spo2">Normal</span>
+            </div>
+            <div class="kpi-body">
+              <span class="kpi-value metric-value" id="kpi-val-spo2">--</span>
+              <span class="kpi-unit">%</span>
+            </div>
+            <div class="kpi-footer">
+              <span class="kpi-subtext" id="kpi-sub-spo2">SpO₂ oxygenation stable</span>
+            </div>
+          </div>
+
+          <!-- Temperature Card -->
+          <div class="kpi-card" id="kpi-card-temp">
+            <div class="kpi-header">
+              <span class="kpi-title"><i class="fa-solid fa-thermometer-half text-orange"></i> Temperature</span>
+              <span class="kpi-badge badge-normal" id="kpi-badge-temp">Normal</span>
+            </div>
+            <div class="kpi-body">
+              <span class="kpi-value metric-value" id="kpi-val-temp">--</span>
+              <span class="kpi-unit">°C</span>
+            </div>
+            <div class="kpi-footer">
+              <span class="kpi-subtext" id="kpi-sub-temp">Thermal baseline stable</span>
+            </div>
+          </div>
+
+          <!-- Risk Score Card -->
+          <div class="kpi-card pointer" id="kpi-card-risk" onclick="app.navigateTo('test')">
+            <div class="kpi-header">
+              <span class="kpi-title"><i class="fa-solid fa-shield-heart text-yellow"></i> Last Risk Score</span>
+              <span class="kpi-badge badge-muted" id="kpi-badge-risk">No Test</span>
+            </div>
+            <div class="kpi-body">
+              <span class="kpi-value metric-value" id="kpi-val-risk">--</span>
+              <span class="kpi-unit">/100</span>
+            </div>
+            <div class="kpi-footer">
+              <span class="kpi-subtext highlight-cyan" id="kpi-sub-risk">Click to start test</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="dashboard-grid">
+          <!-- MAIN COLUMN: Charts -->
+          <div class="main-charts-column">
+            <!-- ECG Waveform Card -->
+            <div class="chart-card large-chart" id="ecg-chart-card">
+              <div class="chart-header">
+                <div class="header-info">
+                  <h3><i class="fa-solid fa-wave-square text-cyan"></i> Real-time ECG Waveform</h3>
+                  <p class="chart-subtitle">MAX30001 Analog Front End • Continuous 200ms streams</p>
+                </div>
+                <div class="header-status">
+                  <span class="status-indicator">
+                    <span class="signal-text">Signal Quality: </span>
+                    <span class="signal-value metric-value" id="ecg-signal-pct">--%</span>
+                  </span>
+                  <div class="signal-bar">
+                    <div class="signal-fill" id="ecg-signal-bar" style="width: 0%"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="chart-wrapper">
+                <canvas id="ecgWaveformChart"></canvas>
+                <div class="scanning-bar-effect"></div>
+              </div>
+              <div class="chart-footer">
+                <span class="lead-quality-text"><i class="fa-solid fa-circle-check text-green"></i> Electrode Contact: <span id="electrode-quality">Good</span></span>
+                <span class="ecg-data-text">R-R Interval: <span id="rr-interval-value" class="metric-value">--</span> ms</span>
+              </div>
+            </div>
+
+            <!-- Double Trend Row -->
+            <div class="trends-row">
+              <!-- HR Trend -->
+              <div class="chart-card">
+                <div class="chart-header">
+                  <h3>Heart Rate Trend</h3>
+                  <span class="metric-value text-muted" id="hr-avg-label">Avg: -- BPM</span>
+                </div>
+                <div class="chart-wrapper trend-wrapper">
+                  <canvas id="hrTrendChart"></canvas>
+                </div>
+              </div>
+              <!-- SpO2 Trend -->
+              <div class="chart-card">
+                <div class="chart-header">
+                  <h3>Oxygen Saturation Trend</h3>
+                  <span class="metric-value text-muted" id="spo2-avg-label">Avg: --%</span>
+                </div>
+                <div class="chart-wrapper trend-wrapper">
+                  <canvas id="spo2TrendChart"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- RIGHT PANEL: Live Metrics / Diagnostics -->
+          <div class="right-diagnostics-column">
+            <!-- Sensor Status checklist -->
+            <div class="panel-card" id="sensor-checklist-card">
+              <h3><i class="fa-solid fa-microchip"></i> AIoT Diagnostics</h3>
+              <div class="sensor-list">
+                <div class="sensor-item" id="diag-ecg">
+                  <span class="sensor-name"><i class="fa-solid fa-heart-circle-check"></i> ECG Front End</span>
+                  <span class="sensor-status text-muted">Offline</span>
+                </div>
+                <div class="sensor-item" id="diag-ppg">
+                  <span class="sensor-name"><i class="fa-solid fa-droplet"></i> Photoplethysmogram</span>
+                  <span class="sensor-status text-muted">Offline</span>
+                </div>
+                <div class="sensor-item" id="diag-temp">
+                  <span class="sensor-name"><i class="fa-solid fa-temperature-three-quarters"></i> Clinical Temp Sensor</span>
+                  <span class="sensor-status text-muted">Offline</span>
+                </div>
+                <div class="sensor-item" id="diag-fsr">
+                  <span class="sensor-name"><i class="fa-solid fa-compress"></i> Contact Pressure</span>
+                  <span class="sensor-status text-muted">Offline</span>
+                </div>
+                <div class="sensor-item" id="diag-imu">
+                  <span class="sensor-name"><i class="fa-solid fa-person-running"></i> IMU Accelerometer</span>
+                  <span class="sensor-status text-muted">Offline</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Motion & Activity Panel -->
+            <div class="panel-card" id="motion-card">
+              <h3><i class="fa-solid fa-running"></i> Activity & Contact</h3>
+              <div class="diagnostic-row">
+                <span class="diag-label">Motion Status</span>
+                <span class="diag-value highlight-cyan metric-value" id="diag-val-motion">--</span>
+              </div>
+              <div class="diagnostic-row">
+                <span class="diag-label">Activity Level</span>
+                <span class="diag-value metric-value" id="diag-val-activity">--</span>
+              </div>
+              <div class="diagnostic-row">
+                <span class="diag-label">Skin Contact Pressure</span>
+                <span class="diag-value metric-value" id="diag-val-pressure">--</span>
+              </div>
+              <div class="diagnostic-row">
+                <span class="diag-label">Contact Quality</span>
+                <span class="diag-value text-green font-bold" id="diag-val-contact">--</span>
+              </div>
+            </div>
+
+            <!-- Device Telemetry Panel -->
+            <div class="panel-card" id="telemetry-card">
+              <h3><i class="fa-solid fa-tower-broadcast"></i> Device Telemetry</h3>
+              <div class="diagnostic-row">
+                <span class="diag-label">Wi-Fi RSSI</span>
+                <span class="diag-value metric-value" id="diag-val-rssi">-- dBm</span>
+              </div>
+              <div class="diagnostic-row">
+                <span class="diag-label">Battery Level</span>
+                <span class="diag-value metric-value" id="diag-val-battery">--%</span>
+              </div>
+              <div class="diagnostic-row">
+                <span class="diag-label">Signal Quality</span>
+                <span class="diag-value text-green" id="diag-val-signal">--</span>
+              </div>
+              <div class="diagnostic-row">
+                <span class="diag-label">Last Transmission</span>
+                <span class="diag-value" id="diag-val-lastseen">--</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PAGE 2: TEST PAGE VIEW -->
+    <section class="page-view" id="test-page">
+      <div class="test-layout">
+        <div class="test-grid">
+          
+          <!-- Instructions Panel -->
+          <div class="test-instructions-panel" id="precheck-container">
+            <div class="card instruction-card">
+              <h2><i class="fa-solid fa-clipboard-list text-cyan"></i> Cardiovascular Risk Assessment</h2>
+              <p class="instruction-lead">Run a continuous 60-second high-resolution physiological data aggregation test. Algorithms will evaluate Heart Rate Variability (HRV) indices, oxygenation curves, thermal baselines, and arrhythmia markers to determine cardiovascular health scores.</p>
+              
+              <div class="instructions-steps">
+                <div class="step-item">
+                  <div class="step-number">1</div>
+                  <div class="step-desc">
+                    <strong>Ensure Proper Contact:</strong> Securely place your finger on the optical PPG sensor and ensure raw ECG electrodes make stable skin contact.
+                  </div>
+                </div>
+                <div class="step-item">
+                  <div class="step-number">2</div>
+                  <div class="step-desc">
+                    <strong>Sit Still:</strong> Remain seated, relax, breathe normally, and avoid physical motion or speaking during the active 60 seconds.
+                  </div>
+                </div>
+                <div class="step-item">
+                  <div class="step-number">3</div>
+                  <div class="step-desc">
+                    <strong>Continuous Streaming:</strong> Our backend aggregates sensor outputs in real-time before sending the feature package to the ML pipeline.
+                  </div>
+                </div>
+              </div>
+
+              <!-- Start Button Container -->
+              <div class="start-btn-container">
+                <button class="btn btn-primary btn-large btn-start-test" id="start-test-btn">
+                  <i class="fa-solid fa-play"></i> START ASSESSMENT TEST
+                </button>
+              </div>
+            </div>
+
+            <!-- Diagnostics Pre-Check -->
+            <div class="card precheck-card">
+              <h3><i class="fa-solid fa-stethoscope"></i> Sensor Pre-Check Status</h3>
+              <div class="precheck-grid" id="precheck-status-grid">
+                <div class="precheck-item status-checking" id="precheck-ecg">
+                  <i class="fa-solid fa-circle-notch fa-spin status-icon"></i>
+                  <span class="precheck-label">ECG (MAX30001)</span>
+                  <span class="precheck-value" id="precheck-val-ecg">Checking...</span>
+                </div>
+                <div class="precheck-item status-checking" id="precheck-ppg">
+                  <i class="fa-solid fa-circle-notch fa-spin status-icon"></i>
+                  <span class="precheck-label">SpO₂ (MAX30102)</span>
+                  <span class="precheck-value" id="precheck-val-ppg">Checking...</span>
+                </div>
+                <div class="precheck-item status-checking" id="precheck-temp">
+                  <i class="fa-solid fa-circle-notch fa-spin status-icon"></i>
+                  <span class="precheck-label">Temperature (MAX30205)</span>
+                  <span class="precheck-value" id="precheck-val-temp">Checking...</span>
+                </div>
+                <div class="precheck-item status-checking" id="precheck-motion">
+                  <i class="fa-solid fa-circle-notch fa-spin status-icon"></i>
+                  <span class="precheck-label">Motion (LSM6DS3)</span>
+                  <span class="precheck-value" id="precheck-val-motion">Checking...</span>
+                </div>
+                <div class="precheck-item status-checking" id="precheck-pressure">
+                  <i class="fa-solid fa-circle-notch fa-spin status-icon"></i>
+                  <span class="precheck-label">Contact Pressure (FSR)</span>
+                  <span class="precheck-value" id="precheck-val-pressure">Checking...</span>
+                </div>
+                <div class="precheck-item status-checking" id="precheck-device">
+                  <i class="fa-solid fa-circle-notch fa-spin status-icon"></i>
+                  <span class="precheck-label">Device Connection</span>
+                  <span class="precheck-value" id="precheck-val-device">Checking...</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Active Test Progress Container -->
+          <div class="active-test-container hidden" id="active-test-container">
+            <div class="card active-test-card">
+              <h2><i class="fa-solid fa-circle-notch fa-spin text-cyan"></i> Data Collection In Progress</h2>
+              <p class="test-lead">Aggregating physiological telemetry...</p>
+              
+              <!-- Circular Progress Gauge -->
+              <div class="circular-progress-wrapper">
+                <svg class="progress-ring" width="220" height="220">
+                  <circle class="progress-ring-circle-bg" stroke="rgba(255,255,255,0.05)" stroke-width="12" fill="transparent" r="95" cx="110" cy="110"/>
+                  <circle class="progress-ring-circle" id="test-progress-circle" stroke="#00E5FF" stroke-width="12" fill="transparent" r="95" cx="110" cy="110"/>
+                </svg>
+                <div class="countdown-overlay">
+                  <span class="countdown-number metric-value" id="countdown-timer">60</span>
+                  <span class="countdown-label">Seconds Left</span>
+                </div>
+              </div>
+
+              <!-- Test Progress Status Messages -->
+              <div class="test-status-subcard">
+                <div class="status-spinner-text">
+                  <i class="fa-solid fa-gears fa-spin text-cyan"></i>
+                  <span class="test-progress-msg" id="test-progress-msg">Initializing buffers...</span>
+                </div>
+                <div class="progress-bar-flat-wrapper">
+                  <div class="progress-bar-flat-fill" id="test-flat-fill" style="width: 0%"></div>
+                </div>
+              </div>
+
+              <!-- Mini Waveform Visualizer -->
+              <div class="test-waveform-preview">
+                <h4>Real-time Patient Monitoring Lead</h4>
+                <div class="test-mini-chart-wrapper">
+                  <canvas id="testMiniECGChart"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- PAGE 3: RESULTS PAGE VIEW -->
+    <section class="page-view" id="results-page">
+      <div class="results-layout">
+        
+        <!-- Header Controls (Download Report, Share, Restart) -->
+        <div class="results-action-row hide-on-print">
+          <h2><i class="fa-solid fa-square-poll-horizontal"></i> Clinical Risk Evaluation Summary</h2>
+          <div class="action-buttons-group">
+            <button class="btn btn-secondary" onclick="window.print()" id="btn-pdf-download">
+              <i class="fa-solid fa-file-pdf text-red"></i> Download PDF Report
+            </button>
+            <button class="btn btn-secondary" id="btn-share-results">
+              <i class="fa-solid fa-share-nodes"></i> Share Results
+            </button>
+            <button class="btn btn-primary" onclick="app.navigateTo('test')" id="btn-retake-test">
+              <i class="fa-solid fa-rotate-left"></i> Perform New Test
+            </button>
+          </div>
+        </div>
+
+        <!-- Printing Clinical Header -->
+        <div class="clinical-print-header show-on-print">
+          <div class="print-meta-left">
+            <h1>CardioAI Clinical Diagnostics</h1>
+            <p>Early Stage Cardiovascular Disease Risk Analysis</p>
+          </div>
+          <div class="print-meta-right">
+            <p><strong>Test Reference ID:</strong> <span class="metric-value" id="print-test-id">--</span></p>
+            <p><strong>Acquisition Timestamp:</strong> <span id="print-timestamp">--</span></p>
+          </div>
+        </div>
+
+        <div class="results-grid">
+          
+          <!-- LEFT COLUMN: Risk Gauge & Health Status Banner -->
+          <div class="results-left-col">
+            <!-- Gauge Card -->
+            <div class="results-card center-content" id="risk-score-gauge-card">
+              <h3>Cardiovascular Risk Index</h3>
+              
+              <!-- Semi-circle SVG Gauge -->
+              <div class="gauge-container">
+                <svg class="semicircle-gauge" viewBox="0 0 300 200" width="300" height="200">
+                  <defs>
+                    <linearGradient id="gauge-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" stop-color="#10B981" />
+                      <stop offset="50%" stop-color="#F59E0B" />
+                      <stop offset="100%" stop-color="#EF4444" />
+                    </linearGradient>
+                  </defs>
+                  <!-- Gauge Arc Path -->
+                  <path d="M 40 160 A 110 110 0 0 1 260 160" fill="none" stroke="#1F2937" stroke-width="18" stroke-linecap="round"/>
+                  <path d="M 40 160 A 110 110 0 0 1 260 160" fill="none" stroke="url(#gauge-gradient)" stroke-width="18" stroke-linecap="round"/>
+                  
+                  <!-- Needle -->
+                  <g id="gauge-needle-group">
+                    <line x1="150" y1="160" x2="150" y2="70" stroke="#F9FAFB" stroke-width="4" stroke-linecap="round" id="gauge-needle" transform="rotate(-90, 150, 160)"/>
+                    <circle cx="150" cy="160" r="10" fill="#F9FAFB"/>
+                  </g>
+                </svg>
+                <div class="gauge-center-labels">
+                  <span class="gauge-score-value metric-value" id="result-risk-score">--</span>
+                  <span class="gauge-score-level font-bold" id="result-risk-level">--</span>
+                </div>
+              </div>
+
+              <div class="confidence-container">
+                <span>Model Classification Confidence: <strong id="result-confidence" class="metric-value">--%</strong></span>
+              </div>
+            </div>
+
+            <!-- Rhythm Status Banner -->
+            <div class="results-card banner-card" id="rhythm-status-banner">
+              <div class="banner-icon-container">
+                <i class="fa-solid fa-triangle-exclamation" id="rhythm-banner-icon"></i>
+              </div>
+              <div class="banner-body-text">
+                <h3 id="rhythm-status-title">Rhythm Analysis</h3>
+                <p id="rhythm-status-desc">Acquiring rhythm diagnostics data packages...</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- RIGHT COLUMN: SHAP Analysis & Vitals Summary Table -->
+          <div class="results-right-col">
+            <!-- SHAP Factors Analysis -->
+            <div class="results-card" id="shap-card">
+              <h3><i class="fa-solid fa-chart-bar text-cyan"></i> Primary Risk Factor Contributions (SHAP Values)</h3>
+              <p class="chart-subtitle">Indicates how individual biometric markers increased or decreased overall classification probability</p>
+              
+              <div class="shap-bars-container" id="shap-bars-list">
+                <!-- Programmatically populated SHAP bars -->
+                <div class="shap-loading-placeholder">
+                  <i class="fa-solid fa-circle-notch fa-spin text-cyan"></i> Loading factor analysis...
+                </div>
+              </div>
+            </div>
+
+            <!-- Vitals Summary Table -->
+            <div class="results-card" id="vitals-table-card">
+              <h3><i class="fa-solid fa-stethoscope text-orange"></i> Snapshot Clinical Vitals</h3>
+              <div class="table-responsive">
+                <table class="clinical-table" id="snapshot-vitals-table">
+                  <thead>
+                    <tr>
+                      <th>Vitals Metric</th>
+                      <th>Acquired Value</th>
+                      <th>Reference Range</th>
+                      <th>Clinical Interpretation</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong class="text-primary">Heart Rate (Average)</strong></td>
+                      <td><span id="vital-val-hr" class="metric-value">--</span> BPM</td>
+                      <td>60 - 100 BPM</td>
+                      <td><span id="vital-status-hr" class="table-badge">--</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong class="text-primary">Blood Oxygen (SpO₂)</strong></td>
+                      <td><span id="vital-val-spo2" class="metric-value">--</span>%</td>
+                      <td>95% - 100%</td>
+                      <td><span id="vital-status-spo2" class="table-badge">--</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong class="text-primary">Body Temperature</strong></td>
+                      <td><span id="vital-val-temp" class="metric-value">--</span> °C</td>
+                      <td>36.1°C - 37.2°C</td>
+                      <td><span id="vital-status-temp" class="table-badge">--</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong class="text-primary">Rhythm Regularity (SDNN)</strong></td>
+                      <td><span id="vital-val-sdnn" class="metric-value">--</span> ms</td>
+                      <td>30 - 60 ms</td>
+                      <td><span id="vital-status-sdnn" class="table-badge">--</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong class="text-primary">Heart Rate Variability (RMSSD)</strong></td>
+                      <td><span id="vital-val-rmssd" class="metric-value">--</span> ms</td>
+                      <td>> 20 ms</td>
+                      <td><span id="vital-status-rmssd" class="table-badge">--</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- CLINICAL RECOMMENDATIONS (FULL WIDTH) -->
+        <div class="results-row-full mt-20">
+          <div class="results-card" id="recommendations-card">
+            <h3><i class="fa-solid fa-user-doctor text-green"></i> Practitioner Clinical Action Plan</h3>
+            <div class="recommendation-content-box">
+              <h4 id="rec-summary-heading">Recommendation Summary</h4>
+              <p class="rec-paragraph" id="rec-summary-text">Assessments results require context correlation. Consult standard practices...</p>
+              
+              <div class="clinical-warning-box">
+                <i class="fa-solid fa-circle-exclamation text-yellow"></i>
+                <div class="warning-text-container">
+                  <strong>Standard Medical Notice:</strong>
+                  <span>CardioAI early warning models are designed for rapid evaluation and do not replace professional cardiac assessments. If experiencing severe chest pain, shortness of breath, or palpitations, please contact emergency health services immediately.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- PAGE 4: HISTORY PAGE VIEW -->
+    <section class="page-view" id="history-page">
+      <div class="history-layout">
+        
+        <!-- History Trend Plot -->
+        <div class="card history-trend-card" id="history-trend-container">
+          <div class="chart-header">
+            <div>
+              <h2><i class="fa-solid fa-chart-line text-cyan"></i> Longitudinal Cardiovascular Risk Trend</h2>
+              <p class="chart-subtitle">Tracks risk indices variations across multiple diagnostic assessments</p>
+            </div>
+            <!-- Wait, since history is isolated per patient in database, the clear button will be scoped or hidden to prevent accidental wipin -->
+            <button class="btn btn-secondary btn-small hide-on-print" id="btn-clear-history" style="display: none;">
+              <i class="fa-solid fa-trash-can text-red"></i> Clear History
+            </button>
+          </div>
+          <div class="chart-wrapper history-chart-wrapper">
+            <canvas id="historyRiskTrendChart"></canvas>
+          </div>
+        </div>
+
+        <!-- History Records Table or Grid -->
+        <div class="history-records-section">
+          <h2><i class="fa-solid fa-list-check text-orange"></i> Assessment History Records Log</h2>
+          
+          <div id="history-no-records" class="history-empty-state">
+            <i class="fa-solid fa-folder-open text-muted font-large"></i>
+            <h3>No Previous Tests Recorded</h3>
+            <p>Run your first cardiovascular risk assessment to begin tracking longitudinal changes in cardiac indices.</p>
+            <button class="btn btn-primary" onclick="app.navigateTo('test')">
+              <i class="fa-solid fa-play"></i> Go to Assessment Page
+            </button>
+          </div>
+
+          <div class="history-list-grid hidden" id="history-records-grid">
+            <!-- Dynamic Cards populated via JS -->
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer hide-on-print" id="footer-section">
+    <div class="footer-container">
+      <p>© 2026 CardioAI System • AIoT Cardiovascular Risk Assessment Platform. Developed for Medical-Grade Edge AI Hackathon.</p>
+      <p class="text-muted">Hardware: ESP32 + MAX30001 (ECG) + MAX30102 (PPG) + MAX30205 (Temp) • Edge ML Pipelines</p>
+    </div>
+  </footer>
+
+  <!-- CDNs for JS dependencies -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <!-- Load JS Logic modules -->
+  <script src="js/utils.js"></script>
+  <script src="js/websocket.js"></script>
+  <script src="js/demo.js"></script>
+  <script src="js/charts.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

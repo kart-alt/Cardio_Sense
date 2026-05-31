@@ -1,0 +1,229 @@
+/* css/history.css — History Logs & Trends page */
+
+.history-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 12px 0;
+}
+
+/* History Longitudinal Trend Card */
+.history-trend-card {
+  padding: 24px;
+}
+
+.history-chart-wrapper {
+  height: 240px;
+  margin-top: 16px;
+}
+
+/* Records List Grid */
+.history-records-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.history-records-section h2 {
+  font-size: 1.3rem;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 10px;
+}
+
+/* No History Placeholder */
+.history-empty-state {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 50px 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 16px;
+  max-width: 600px;
+  margin: 40px auto;
+}
+
+.history-empty-state i {
+  font-size: 3.5rem;
+  color: var(--text-muted);
+}
+
+.history-empty-state h3 {
+  font-size: 1.3rem;
+  margin-bottom: -6px;
+}
+
+.history-empty-state p {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  max-width: 440px;
+  margin-bottom: 8px;
+}
+
+/* History Cards List */
+.history-list-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.history-record-card {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: all 0.25s ease;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.history-record-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background-color: var(--text-muted);
+}
+
+.history-record-card.risk-low::before {
+  background-color: var(--accent-green);
+}
+
+.history-record-card.risk-moderate::before {
+  background-color: var(--accent-yellow);
+}
+
+.history-record-card.risk-high::before {
+  background-color: var(--accent-red);
+}
+
+.history-record-card:hover {
+  border-color: var(--border-bright);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+/* Card Row 1: Header Info */
+.record-row-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+  padding-bottom: 8px;
+}
+
+.record-meta {
+  display: flex;
+  flex-direction: column;
+}
+
+.record-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.record-date {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  margin-top: 2px;
+}
+
+.record-risk-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.record-risk-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.record-risk-label {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-top: 2px;
+}
+
+.record-risk-badge.risk-low { color: var(--accent-green); }
+.record-risk-badge.risk-moderate { color: var(--accent-yellow); }
+.record-risk-badge.risk-high { color: var(--accent-red); }
+
+/* Card Row 2: Vitals metrics row */
+.record-row-vitals {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+}
+
+.record-vital-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.record-vital-item i {
+  font-size: 0.85rem;
+}
+
+/* Card Row 3: Action & Rhythm Status */
+.record-row-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.8rem;
+  margin-top: 4px;
+}
+
+.record-rhythm-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 500;
+}
+
+.record-rhythm-status.status-abnormal {
+  color: var(--accent-yellow);
+}
+
+.record-rhythm-status.status-normal {
+  color: var(--accent-green);
+}
+
+.record-action-link {
+  color: var(--accent-cyan);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.record-action-link i {
+  transition: transform 0.2s ease;
+}
+
+.history-record-card:hover .record-action-link i {
+  transform: translateX(3px);
+}
+
+/* Responsive History layouts */
+@media (max-width: 900px) {
+  .history-list-grid {
+    grid-template-columns: 1fr;
+  }
+}
